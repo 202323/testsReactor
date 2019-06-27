@@ -62,7 +62,26 @@ public class DishWasherTest {
         } catch (PumpException e) {
             fail();
         } catch (EngineException e) {
-            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void engineShouldCallRunProgramTwiceWhenWashingProgramIsNotRinse(){
+        programConfiguration = ProgramConfiguration.builder()
+                                                   .withProgram(WashingProgram.INTENSIVE)
+                                                   .withTabletsUsed(true)
+                                                   .build();
+
+        when(hodor.closed()).thenReturn(false);
+        when(dirtFilter.capacity()).thenReturn(60.0d);
+
+        dishWasher.start(programConfiguration);
+
+        try {
+            verify(engine, times(2)).runProgram(anyInt());
+        } catch (EngineException e) {
+            fail();
         }
     }
 
