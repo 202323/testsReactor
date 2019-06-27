@@ -108,13 +108,23 @@ public class DishWasherTest {
     }
 
     @Test
+    public void shouldReturnStatusErrorProgramOnThrowEngineException() throws EngineException {
+        when(hodor.closed()).thenReturn(false);
+        when(dirtFilter.capacity()).thenReturn(60.0d);
+        Mockito.doThrow(EngineException.class)
+               .when(engine)
+               .runProgram(programConfiguration
+                .getProgram()
+                .getTimeInMinutes());
+
+        assertThat(dishWasher.start(programConfiguration).getStatus(), is(Status.ERROR_PROGRAM));
+
+    }
+
+    @Test
     public void test() {
         fail("Not yet implemented");
     }
 
-//    @Test public void test() throws Exception{
-//        Mockito.doThrow(PumpException.class).when(waterPump).drain();
-//        fail("Not yet implemented");
-//    }
 
 }
