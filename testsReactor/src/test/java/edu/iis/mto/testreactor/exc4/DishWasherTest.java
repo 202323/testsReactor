@@ -98,10 +98,23 @@ public class DishWasherTest {
         assertThat(dishWasher.start(programConfiguration).getRunMinutes(), is(WashingProgram.NIGHT.getTimeInMinutes()));
     }
 
+    @Test //(expected = PumpException.class)
+    public void shouldReturnStatusErrorPumpOnThrowPumpException() throws PumpException {
+        when(hodor.closed()).thenReturn(false);
+        when(dirtFilter.capacity()).thenReturn(60.0d);
+        Mockito.doThrow(PumpException.class).when(waterPump).drain();
+        assertThat(dishWasher.start(programConfiguration).getStatus(), is(Status.ERROR_PUMP));
+
+    }
+
     @Test
     public void test() {
         fail("Not yet implemented");
     }
 
+//    @Test public void test() throws Exception{
+//        Mockito.doThrow(PumpException.class).when(waterPump).drain();
+//        fail("Not yet implemented");
+//    }
 
 }
