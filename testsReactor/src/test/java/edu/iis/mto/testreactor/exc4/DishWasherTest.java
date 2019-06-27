@@ -86,6 +86,20 @@ public class DishWasherTest {
     }
 
     @Test
+    public void shouldReturnStatusErrorPumpOnThrowPumpException(){
+        programConfiguration = ProgramConfiguration.builder()
+                                                   .withProgram(WashingProgram.RINSE)
+                                                   .withTabletsUsed(true)
+                                                   .build();
+
+        when(hodor.closed()).thenReturn(false);
+        when(dirtFilter.capacity()).thenReturn(60.0d);
+        when(dishWasher.start(programConfiguration)).thenThrow(new PumpException());
+
+        assertThat(dishWasher.start(programConfiguration).getStatus(), is(Status.ERROR_PUMP));
+    }
+
+    @Test
     public void test() {
         fail("Not yet implemented");
     }
