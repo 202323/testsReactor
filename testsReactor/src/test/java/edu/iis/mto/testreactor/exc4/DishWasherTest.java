@@ -86,22 +86,22 @@ public class DishWasherTest {
     }
 
     @Test
-    public void shouldReturnStatusErrorPumpOnThrowPumpException(){
+    public void shouldReturnStatusSuccessAndTimeInMinutesOnSuccessfullyFinishingTheProgram(){
         programConfiguration = ProgramConfiguration.builder()
-                                                   .withProgram(WashingProgram.RINSE)
+                                                   .withProgram(WashingProgram.NIGHT)
                                                    .withTabletsUsed(true)
                                                    .build();
-
         when(hodor.closed()).thenReturn(false);
         when(dirtFilter.capacity()).thenReturn(60.0d);
-        when(dishWasher.start(programConfiguration)).thenThrow(new PumpException());
 
-        assertThat(dishWasher.start(programConfiguration).getStatus(), is(Status.ERROR_PUMP));
+        assertThat(dishWasher.start(programConfiguration).getStatus(), is(Status.SUCCESS));
+        assertThat(dishWasher.start(programConfiguration).getRunMinutes(), is(WashingProgram.NIGHT.getTimeInMinutes()));
     }
 
     @Test
     public void test() {
         fail("Not yet implemented");
     }
+
 
 }
